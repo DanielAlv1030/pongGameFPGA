@@ -1,0 +1,27 @@
+LIBRARY IEEE;
+USE ieee.std_logic_1164.all;
+
+ENTITY MUXES_FOR_UBC IS
+PORT(
+    change_1,  change_2 	: IN  STD_LOGIC;
+    sel            				: IN  STD_LOGIC;
+    z               			   : OUT STD_LOGIC
+);
+END ENTITY MUXES_FOR_UBC;
+
+ARCHITECTURE functional OF MUXES_FOR_UBC IS
+BEGIN
+    PROCESS (sel, change_1, change_2)
+    BEGIN
+        CASE sel IS
+            WHEN '0' =>
+                z <= change_1;
+            WHEN '1' =>
+                z <= change_2;
+			  
+            WHEN OTHERS =>
+                z <= '0'; -- Opcional: definir comportamiento para otros valores de selección
+					 
+        END CASE;
+    END PROCESS;
+END ARCHITECTURE functional;

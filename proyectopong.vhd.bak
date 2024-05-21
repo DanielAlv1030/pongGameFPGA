@@ -1,0 +1,45 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+----------------------------------------------
+ENTITY proyectopong IS
+  PORT (  btn_iz_J1	:	IN  STD_LOGIC:='0';
+			btn_der_J1	:	IN  STD_LOGIC:='0';
+			btn_iz_J2	:	IN  STD_LOGIC:='0';
+			btn_der_J2	:	IN  STD_LOGIC:='0';
+			
+			btn_inicio	:	IN  STD_LOGIC:='0';
+			
+			clk  			: IN  STD_LOGIC:='0';
+         rst  			: IN  STD_LOGIC:='0';
+			syn_clr  	: IN  STD_LOGIC:='0';
+			ena  			: IN  STD_LOGIC:='1';
+			output_col	: OUT STD_LOGIC_VECTOR(15 DOWNTO 0);	
+			output_row	: OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
+			 
+END ENTITY;
+-----------------------------------------------
+ARCHITECTURE general OF proyectopong IS
+	SIGNAL ready_t_signal : STD_LOGIC;
+	SIGNAL state_to_leds : STD_LOGIC_VECTOR(3 DOWNTO 0);
+	
+BEGIN
+
+
+	cont250us: ENTITY work.matrix_controller
+	PORT MAP(	
+					);
+					
+	matrix_fsm: ENTITY work.matrix_fsm
+	PORT MAP(	input_img 		=> --"11111111000000000010010000100100010110100010010010000001001001000101101000000000001001000100001000011000001111000000000000000000",
+												"10000001100000010010010000100100011111100010010011111111001001000111111000000000001111000100001000011000001111001000000110000001",
+	
+					reset 		=> rst,
+					clock			=> clk,
+					ready_timer	=>	ready_t_signal,
+					output_col	=> output_col,
+					output_row	=> output_row
+					);
+
+
+
+END ARCHITECTURE;

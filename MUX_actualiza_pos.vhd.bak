@@ -1,0 +1,27 @@
+LIBRARY IEEE;
+USE ieee.std_logic_1164.all;
+
+ENTITY MUX_actualiza_pos IS
+PORT(
+    btn_der_J1,  btn_iz_J1 	: IN  STD_LOGIC;
+    sel            				: IN  STD_LOGIC;
+    Y               			   : OUT STD_LOGIC
+);
+END ENTITY MUX_actualiza_pos;
+
+ARCHITECTURE functional OF MUX_actualiza_pos IS
+BEGIN
+    PROCESS (sel, btn_der_J1, btn_iz_J1)
+    BEGIN
+        CASE sel IS
+            WHEN '0' =>
+                Y <= btn_der_J1;
+            WHEN '1' =>
+                Y <= btn_iz_J1;
+			  
+            WHEN OTHERS =>
+                Y <= '0'; -- Opcional: definir comportamiento para otros valores de selección
+					 
+        END CASE;
+    END PROCESS;
+END ARCHITECTURE functional;

@@ -1,0 +1,88 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+
+ENTITY matrix_fsm IS
+	PORT(	reset			: IN STD_LOGIC;
+			clock			: IN STD_LOGIC;
+			input_img	: IN STD_LOGIC_VECTOR(127 DOWNTO 0);
+			ready_timer : IN STD_LOGIC;
+			output_col	: OUT STD_LOGIC_VECTOR(15 DOWNTO 0);	
+			output_row	: OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
+END ENTITY;
+
+ARCHITECTURE states	OF matrix_fsm IS
+	TYPE state IS (state0, state1, state2, state3, state4, state5, state6, state7, state8, state9, state10, state11, state12, state13, state14, state15, state16, state17, state18, state19, state20, state21, state22, state23, state24, state25, state26, state27, state28, state29, state30, state31, state32, state33, state34, state35, state36, state37, state38, state39, state40, state41, state42, state43, state44, state45, state46, state47, state48, state49, state50, state51, state52, state53, state54, state55, state56, state57, state58, state59, state60, state61, state62, state63, state64, state65, state66, state67, state68, state69, state70, state71, state72, state73, state74, state75, state76, state77, state78, state79, state80, state81, state82, state83, state84, state85, state86, state87, state88, state89, state90, state91, state92, state93, state94, state95, state96, state97, state98, state99, state100, state101, state102, state103, state104, state105, state106, state107, state108, state109, state110, state111, state112, state113, state114, state115, state116, state117, state118, state119, state120, state121, state122, state123, state124, state125, state126, state127);
+	--TYPE state IS (state0, state1, state2);
+	SIGNAL pr_state, nx_state: state; 
+BEGIN
+
+-------------sequential section --------------
+	PROCESS	(reset,clock)
+	BEGIN
+		IF (reset='1') THEN
+			pr_state <= state0;
+		ELSIF (rising_edge(clock)) THEN 
+			pr_state <= nx_state;
+		END IF;
+	END PROCESS;
+	
+--------------Conbinational section: -----------
+
+	PROCESS	( pr_state, ready_timer, input_img)
+	BEGIN
+		CASE pr_state IS
+			WHEN state0 =>
+				--output_col	<= input_img(0)& "000000000000000";
+				--output_row	<= "01111111";
+				IF (input_img(0) = '1') THEN
+					output_col	<= "1000000000000000";
+					output_row	<= "01111111";
+				ELSE
+					output_col	<= "0000000000000000";
+					output_row	<= "11111111";
+				END IF;
+					
+				IF (ready_timer = '1') THEN	
+					nx_state <= state1;
+				else
+					nx_state <= state0;
+				END IF;
+				
+			WHEN state1 =>
+				--output_col	<= '0'&input_img(1)&"00000000000000";
+				--output_row	<= "01111111";
+				IF (input_img(1) = '1') THEN
+					output_col	<= "0100000000000000";
+					output_row	<= "01111111";
+				ELSE
+					output_col	<= "0000000000000000";
+					output_row	<= "11111111";
+				END IF;
+					
+				IF (ready_timer = '1') THEN	
+					nx_state <= state2;
+				else
+					nx_state <= state1;
+				END IF;
+			WHEN state2 =>
+				--output_col	<= "00"&input_img(2)&"0000000000000";
+				--output_row	<= "01111111";
+			  IF (input_img(2) = '1') THEN
+					output_col	<= "0010000000000000";
+					output_row	<= "01111111";
+				ELSE
+					output_col	<= "0000000000000000";
+					output_row	<= "11111111";
+				END IF;
+					
+				IF (ready_timer = '1') THEN	
+					nx_state <= state3;
+					--nx_state <= state0;
+				else
+					nx_state <= state2;
+				END IF;
+				
+	
+		END CASE;
+	END PROCESS;
+	END ARCHITECTURE;

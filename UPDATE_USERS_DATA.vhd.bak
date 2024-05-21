@@ -1,0 +1,113 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+----------------------------------------------
+ENTITY UPDATE_USERS_DATA IS
+  PORT (  	
+				btn_iz_J1		: IN  STD_LOGIC:='0';
+				btn_der_J1		: IN  STD_LOGIC:='0';
+				btn_iz_J2		: IN  STD_LOGIC:='0';
+				btn_der_J2		: IN  STD_LOGIC:='0';
+				clk  				: IN  STD_LOGIC:='0';
+            rst  				: IN  STD_LOGIC:='0';
+				--up					: IN  std_logic;
+				sel      		: IN  STD_LOGIC;
+			   syn_clr  		: IN  STD_LOGIC:='0';
+			   ena  				: IN  STD_LOGIC:='1';
+				--y			: out std_LOGIC;
+			   posicion_jugador_1     : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+			   posicion_jugador_2     : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+				);
+			  --DANIEL_PERRA_1	: OUT STD_LOGIC_VECTOR(15 DOWNTO 0);	
+				--DANIEL_PERRA_2	: OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
+				
+END ENTITY;
+-----------------------------------------------
+ARCHITECTURE general OF UPDATE_USERS_DATA IS
+	SIGNAL q0 ,state_to_Buttons,ready_t_signal: STD_LOGIC;
+   SIGNAL MUXES_FOR_BUTTON_LEFT_1,MUXES_FOR_BUTTON_RIGHT_1: STD_LOGIC;
+	SIGNAL MUXES_FOR_BUTTON_LEFT_2,MUXES_FOR_BUTTON_RIGHT_2: STD_LOGIC;
+	SIGNAL posicion_jugador, posicion_jugador_M :STD_LOGIC;
+	SIGNAL posicion_jugador_I_2, posicion_jugador_M_2 :STD_LOGIC;
+	SIGNAL ENA_1, ENA_2 : STD_LOGIC;
+BEGIN
+	
+	SELECTORSUMARESTA_1: ENTITY work.MUXES
+	PORT MAP(	
+					btn_iz_J1		=>	btn_iz_J1,
+					btn_der_J1		=>	btn_der_J1,
+					sel				=> sel,
+					y					=>	MUXES_FOR_BUTTON_RIGHT_1
+					);	
+					
+	SELECTORSUMARESTA_2: ENTITY work.MUXES_2
+	PORT MAP(	
+					btn_iz_J2		=>	btn_iz_J2,
+					btn_der_J2		=>	btn_der_J2,
+					sel				=> sel,
+					y					=>	MUXES_FOR_BUTTON_RIGHT_2
+					);
+					
+	ACTUALIZAPOSICION_1: ENTITY work.MUXES_IZQUIERDA
+	PORT MAP(	
+					btn_iz_J1		=>	btn_iz_J1,
+					btn_der_J1		=>	btn_der_J1,
+					--btn_iz_J2		=>	btn_iz_J2,
+					--btn_der_J2		=>	btn_der_J2,
+					sel				=> sel,
+					y					=>	MUXES_FOR_BUTTON_LEFT_1
+					);
+					
+	ACTUALIZAPOSICION_2: ENTITY work.MUXES_IZQUIERDA_2
+	PORT MAP(	
+					btn_iz_J2		=>	btn_iz_J2,
+					btn_der_J2		=>	btn_der_J2,
+					sel				=> sel,
+					y					=>	MUXES_FOR_BUTTON_LEFT_2
+					);			
+					
+					
+	SELECTORUNIVERSAL_1: ENTITY work.MUXES_FOR_UBC
+	PORT MAP(	
+					change_1		=>	posicion_jugador,
+					change_2		=>	posicion_jugador_M,
+					sel				=> sel,
+					z					=>	ENA_1
+					);		
+					
+	SELECTORUNIVERSAL_2: ENTITY work.MUXES_FOR_UBC
+	PORT MAP(	
+					change_1		=>	posicion_jugador_I_2,
+					change_2		=>	posicion_jugador_M_2,
+					sel				=> sel,
+					z					=>	ENA_2
+					);
+					
+	univ_bin_counter_1: ENTITY work.univ_bin_counter
+	PORT MAP(	rst 		=> rst,
+					ena		=> ENA_1,
+					syn_clr	=> syn_clr,
+					clk		=> MUXES_FOR_BUTTON_LEFT_1,
+					--load		=> load,
+					up			=> MUXES_FOR_BUTTON_RIGHT_1,
+					--d			=> d,
+					--MAX		=> MAX,
+					max_tick	=>	posicion_jugador,
+					min_tick => posicion_jugador_M,
+					counter  => posicion_jugador_1
+					);
+
+	univ_bin_counter_2: ENTITY work.univ_bin_counter
+	PORT MAP(	rst 		=> rst,
+					ena		=> ENA_2,
+					syn_clr	=> syn_clr,
+					clk		=> MUXES_FOR_BUTTON_LEFT_2,
+					--load		=> load,
+					up			=> MUXES_FOR_BUTTON_RIGHT_2,
+					--d			=> d,
+					--MAX		=> MAX,
+					max_tick	=>	posicion_jugador_I_2,
+					min_tick => posicion_jugador_M_2,
+					counter  => posicion_jugador_2
+					);			
+	
+END ARCHITECTURE;

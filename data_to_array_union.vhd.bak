@@ -1,0 +1,37 @@
+LIBRARY IEEE;
+USE ieee.std_logic_1164.all;
+USE ieee.numeric_std.all;
+
+ENTITY data_to_array_union IS
+PORT(
+    Aux_pelota,Aux_raqueta	: IN STD_LOGIC_VECTOR( 15 DOWNTO 0);
+	 total_signal : OUT STD_LOGIC_VECTOR(15 DOWNTO 0):= (OTHERS =>'0')
+);
+END ENTITY data_to_array_union;
+
+ARCHITECTURE functional OF data_to_array_union IS
+
+	CONSTANT zeros : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS =>'0');
+	SIGNAL auxiliar : STD_LOGIC_VECTOR(15 DOWNTO 0);
+BEGIN
+	
+	
+	total_signal(0) <= '1' WHEN Aux_pelota(0) OR Aux_raqueta(0) ELSE '0';
+	total_signal(1) <= '1' WHEN Aux_pelota(1) OR Aux_raqueta(1) ELSE '0';
+	total_signal(2) <= '1' WHEN Aux_pelota(2) OR Aux_raqueta(2) ELSE '0';
+	total_signal(3) <= '1' WHEN Aux_pelota(3) OR Aux_raqueta(3) ELSE '0';
+	total_signal(4) <= '1' WHEN Aux_pelota(4) OR Aux_raqueta(4) ELSE '0';
+	total_signal(5) <= '1' WHEN Aux_pelota(5) OR Aux_raqueta(5) ELSE '0';
+	total_signal(6) <= '1' WHEN Aux_pelota(6) OR Aux_raqueta(6) ELSE '0';
+	total_signal(7) <= '1' WHEN Aux_pelota(7) OR Aux_raqueta(7) ELSE '0';
+	
+	--auxiliar <= previo;
+	
+	--Aux_Data(to_integer(unsigned(Pelota_Y))) <= '1' WHEN Pelota_X = contador ELSE '0';
+	
+	--Aux_Data <= auxiliar;
+--Aux_Data(15) <= '1' WHEN J1_X = contador OR (unsigned(J1_X) + 1 = unsigned(contador)) OR (unsigned(J1_X) - 1 = unsigned(contador)) ELSE '0';
+--Aux_Data(0) <= '1' WHEN J2_X = contador OR (unsigned(J2_X) + 1 = unsigned(contador)) OR (unsigned(J2_X) - 1 = unsigned(contador)) ELSE '0';
+
+
+END ARCHITECTURE functional;
